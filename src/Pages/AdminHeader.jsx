@@ -109,32 +109,32 @@ const AdminHeader = () => {
             Dashboard
           </a>
           <a
-            href="/users"
+            href="/fingerprint-registration"
             className="hover:text-primary block"
             onClick={handleCloseMenu}
           >
-            Users
+            Fingerprint
           </a>
           <a
-            href="/skills"
+            href="/lebana-registration"
             className="hover:text-primary block"
             onClick={handleCloseMenu}
           >
-            Skills
+            Lebana
           </a>
           <a
-            href="/bookings"
+            href="/shade-registration"
             className="hover:text-primary block"
             onClick={handleCloseMenu}
           >
-            Bookings
+            Shades
           </a>
           <a
-            href="/reports"
+            href="/all-program"
             className="hover:text-primary block"
             onClick={handleCloseMenu}
           >
-            Communities
+            Program
           </a>
         </nav>
       </div>
