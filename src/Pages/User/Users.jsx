@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   CheckCircle,
@@ -17,154 +17,10 @@ import Layout from "../../Components/Layout/Layout";
 
 const UserTable = () => {
   const [openDropdownId, setOpenDropdownId] = useState(null);
+  const [fingers, setFingers] = useState([]);
   const navigate = useNavigate();
 
-  const users = [
-    {
-      id: 1,
-      fullName: "Sarah Johnson",
-      email: "sarah.j@example.com",
-      phone: "08123439433",
-      address: "12 Agege, Lagos",
-      expectation: "to grow",
-      gender: "Female",
-      verified: true,
-      balance: {
-        skillToken: 400,
-        mainBalance: 200,
-      },
-      identification: [
-        {
-          type: "Driver's License",
-          id: "DL-98765432",
-          expires: "12/2025",
-        },
-        {
-          type: "National ID",
-          id: "NIN-123456789",
-          issued: "01/2020",
-        },
-        {
-          type: "Passport",
-          id: "PP-987654321",
-          expires: "06/2027",
-        },
-        {
-          type: "State ID",
-          id: "SID-456789123",
-          issued: "03/2022",
-        },
-      ],
-    },
-    {
-      id: 2,
-      fullName: "Sarah Johnson",
-      email: "sarah.j@example.com",
-      phone: "08123439433",
-      address: "12 Agege, Lagos",
-      expectation: "to grow",
-      gender: "Female",
-      verified: true,
-      balance: {
-        skillToken: 400,
-        mainBalance: 200,
-      },
-      identification: [
-        {
-          type: "Driver's License",
-          id: "DL-98765432",
-          expires: "12/2025",
-        },
-        {
-          type: "National ID",
-          id: "NIN-123456789",
-          issued: "01/2020",
-        },
-        {
-          type: "Passport",
-          id: "PP-987654321",
-          expires: "06/2027",
-        },
-        {
-          type: "State ID",
-          id: "SID-456789123",
-          issued: "03/2022",
-        },
-      ],
-    },
-    {
-      id: 3,
-      fullName: "Sarah Johnson",
-      email: "sarah.j@example.com",
-      phone: "08123439433",
-      address: "12 Agege, Lagos",
-      expectation: "to grow",
-      gender: "Female",
-      verified: true,
-      balance: {
-        skillToken: 400,
-        mainBalance: 200,
-      },
-      identification: [
-        {
-          type: "Driver's License",
-          id: "DL-98765432",
-          expires: "12/2025",
-        },
-        {
-          type: "National ID",
-          id: "NIN-123456789",
-          issued: "01/2020",
-        },
-        {
-          type: "Passport",
-          id: "PP-987654321",
-          expires: "06/2027",
-        },
-        {
-          type: "State ID",
-          id: "SID-456789123",
-          issued: "03/2022",
-        },
-      ],
-    },
-    {
-      id: 4,
-      fullName: "Sarah Johnson",
-      email: "sarah.j@example.com",
-      phone: "08123439433",
-      address: "12 Agege, Lagos",
-      expectation: "to grow",
-      gender: "Female",
-      verified: true,
-      balance: {
-        skillToken: 400,
-        mainBalance: 200,
-      },
-      identification: [
-        {
-          type: "Driver's License",
-          id: "DL-98765432",
-          expires: "12/2025",
-        },
-        {
-          type: "National ID",
-          id: "NIN-123456789",
-          issued: "01/2020",
-        },
-        {
-          type: "Passport",
-          id: "PP-987654321",
-          expires: "06/2027",
-        },
-        {
-          type: "State ID",
-          id: "SID-456789123",
-          issued: "03/2022",
-        },
-      ],
-    },
-  ];
+  const apiUrl = import.meta.env.VITE_API_URL; // Correct way in Vite
 
   const handleAction = (action, user) => {
     setOpenDropdownId(null);
@@ -189,7 +45,19 @@ const UserTable = () => {
         break;
     }
   };
+  useEffect(() => {
+    const fetchFingers = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/api/fingers`);
+        const data = await response.json();
+        setFingers(data);
+      } catch (error) {
+        console.error("Error fetching fingerprint data:", error);
+      }
+    };
 
+    fetchFingers();
+  }, []);
   return (
     <Layout>
       <div className="w-full px-3 lg:px-[8rem]">
@@ -221,22 +89,18 @@ const UserTable = () => {
           </div>
         </div>
 
-        {/* Users Table */}
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Name/Email
+                  Name / Email
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Contact
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Other
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  More
+                  Details
                 </th>
                 <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
@@ -247,80 +111,73 @@ const UserTable = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {users.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50">
+              {fingers.map((finger) => (
+                <tr key={finger._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
-                      {user.fullName}
+                      {finger.fullname}
                     </div>
-                    <div className="text-sm text-gray-500">{user.email}</div>
+                    <div className="text-sm text-gray-500">{finger.email}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{user.phone}</div>
-                    <div className="text-sm text-gray-500">{user.address}</div>
+                    <div className="text-sm text-gray-500">{finger.phone}</div>
+                    <div className="text-sm text-gray-500">
+                      {finger.country}, {finger.state}
+                    </div>
                   </td>
-
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
-                      Expectation: {user.expectation}
+                      Denomination: {finger.denomination}
                     </div>
                     <div className="text-sm text-gray-900">
-                      How good are you: {user.address}
+                      Position: {finger.position}
                     </div>
                     <div className="text-sm text-gray-900">
-                      Confidence level: {user.address}
+                      Referred: {finger.referred}{" "}
+                      {finger.referred === "yes" && `(${finger.who})`}
                     </div>
                     <div className="text-sm text-gray-900">
-                      Skill: {user.address}
+                      Yourself: {finger.yourself}
                     </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex flex-wrap gap-2"></div>
+                    <div className="text-sm text-gray-900">
+                      Received: {finger.received}
+                    </div>
+                    <div className="text-sm text-gray-900">
+                      When: {finger.when}
+                    </div>
+                    <div className="text-sm text-gray-900">
+                      Enough: {finger.enough}
+                    </div>
+                    <div className="text-sm text-gray-900">
+                      Done: {finger.done}
+                    </div>
+                    <div className="text-sm text-gray-900">
+                      Area: {finger.area}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-center">
-                    {user.verified ? (
-                      <CheckCircle className="inline-block w-5 h-5 text-green-500" />
-                    ) : (
-                      <XCircle className="inline-block w-5 h-5 text-red-500" />
-                    )}
+                    <CheckCircle className="inline-block w-5 h-5 text-green-500" />
+
+                    <XCircle className="inline-block w-5 h-5 text-red-500" />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-center relative">
                     <button
                       onClick={() =>
                         setOpenDropdownId(
-                          openDropdownId === user.id ? null : user.id
+                          openDropdownId === finger._id ? null : finger._id
                         )
                       }
                       className="text-gray-400 hover:text-gray-600"
                     >
                       <MoreVertical className="w-5 h-5" />
                     </button>
-                    {openDropdownId === user.id && (
+                    {openDropdownId === finger._id && (
                       <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
                         <div className="py-1" role="menu">
-                          <button
-                            onClick={() => handleAction("view", user)}
-                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                          >
-                            <LuView className="w-4 h-4 mr-2" /> View User
-                          </button>
-                          <button
-                            onClick={() => handleAction("edit", user)}
-                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                          >
-                            <Edit className="w-4 h-4 mr-2" /> Edit User
-                          </button>
-                          <button
-                            onClick={() => handleAction("email", user)}
-                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                          >
+                          <button className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
                             <Mail className="w-4 h-4 mr-2" /> Send Email
                           </button>
-
-                          <button
-                            onClick={() => handleAction("delete", user)}
-                            className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
-                          >
+                          <button className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left">
                             <Trash className="w-4 h-4 mr-2" /> Delete
                           </button>
                         </div>
