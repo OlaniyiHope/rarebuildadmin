@@ -103,32 +103,47 @@ const UserTable = () => {
               <tr key={apply.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">
-                    {apply.fullName}
+                    {apply.firstName}
                   </div>
                   <div className="text-sm text-gray-500">{apply.email}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">{apply.phone}</div>
-                  <div className="text-sm text-gray-500">{apply.address}</div>
-                </td>
-
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
-                    Expectation: {apply.expectation}
-                  </div>
-                  <div className="text-sm text-gray-900">
-                    How good are you: {apply.address}
-                  </div>
-                  <div className="text-sm text-gray-900">
-                    Confidence level: {apply.address}
-                  </div>
-                  <div className="text-sm text-gray-900">
-                    Skill: {apply.address}
-                  </div>
+                  <div className="text-sm text-gray-500">{apply.program}</div>
                 </td>
                 <td className="px-6 py-4">
-                  <div className="flex flex-wrap gap-2"></div>
+                  <div className="flex flex-wrap gap-2">{apply.phone}</div>
+                  <div className="flex flex-wrap gap-2">{apply.address}</div>
                 </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-900">
+                    Expectation: {apply.expectations}
+                  </div>
+                  <div className="text-sm text-gray-900">
+                    With someone {apply.attendanceResponse}
+                  </div>
+                  <div className="text-sm text-gray-900">
+                    Confidence: {apply.confidence}
+                  </div>
+                  <div className="text-sm text-gray-900">
+                    Interested: {apply.interested}
+                  </div>
+                  <div className="text-sm text-gray-900">
+                    How good: {apply.howgood}
+                  </div>
+                  <div className="text-sm text-gray-900">
+                    Mind: {apply.mind}
+                  </div>
+                  <div className="text-sm text-gray-900">
+                    Think: {apply.think}
+                  </div>
+                  <div className="text-sm text-gray-900">
+                    Solve: {apply.solve}
+                  </div>
+                  <div className="text-sm text-gray-900">
+                    Creating: {apply.creating}
+                  </div>
+                </td>
+
                 <td className="px-6 py-4 whitespace-nowrap text-center">
                   {apply.verified ? (
                     <CheckCircle className="inline-block w-5 h-5 text-green-500" />
