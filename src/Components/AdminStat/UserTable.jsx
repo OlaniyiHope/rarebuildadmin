@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   CheckCircle,
@@ -18,153 +18,9 @@ import Layout from "../../Components/Layout/Layout";
 const UserTable = () => {
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const navigate = useNavigate();
+  const [applys, setApplys] = useState([]);
 
-  const users = [
-    {
-      id: 1,
-      fullName: "Sarah Johnson",
-      email: "sarah.j@example.com",
-      phone: "08123439433",
-      address: "12 Agege, Lagos",
-      expectation: "to grow",
-      gender: "Female",
-      verified: true,
-      balance: {
-        skillToken: 400,
-        mainBalance: 200,
-      },
-      identification: [
-        {
-          type: "Driver's License",
-          id: "DL-98765432",
-          expires: "12/2025",
-        },
-        {
-          type: "National ID",
-          id: "NIN-123456789",
-          issued: "01/2020",
-        },
-        {
-          type: "Passport",
-          id: "PP-987654321",
-          expires: "06/2027",
-        },
-        {
-          type: "State ID",
-          id: "SID-456789123",
-          issued: "03/2022",
-        },
-      ],
-    },
-    {
-      id: 2,
-      fullName: "Sarah Johnson",
-      email: "sarah.j@example.com",
-      phone: "08123439433",
-      address: "12 Agege, Lagos",
-      expectation: "to grow",
-      gender: "Female",
-      verified: true,
-      balance: {
-        skillToken: 400,
-        mainBalance: 200,
-      },
-      identification: [
-        {
-          type: "Driver's License",
-          id: "DL-98765432",
-          expires: "12/2025",
-        },
-        {
-          type: "National ID",
-          id: "NIN-123456789",
-          issued: "01/2020",
-        },
-        {
-          type: "Passport",
-          id: "PP-987654321",
-          expires: "06/2027",
-        },
-        {
-          type: "State ID",
-          id: "SID-456789123",
-          issued: "03/2022",
-        },
-      ],
-    },
-    {
-      id: 3,
-      fullName: "Sarah Johnson",
-      email: "sarah.j@example.com",
-      phone: "08123439433",
-      address: "12 Agege, Lagos",
-      expectation: "to grow",
-      gender: "Female",
-      verified: true,
-      balance: {
-        skillToken: 400,
-        mainBalance: 200,
-      },
-      identification: [
-        {
-          type: "Driver's License",
-          id: "DL-98765432",
-          expires: "12/2025",
-        },
-        {
-          type: "National ID",
-          id: "NIN-123456789",
-          issued: "01/2020",
-        },
-        {
-          type: "Passport",
-          id: "PP-987654321",
-          expires: "06/2027",
-        },
-        {
-          type: "State ID",
-          id: "SID-456789123",
-          issued: "03/2022",
-        },
-      ],
-    },
-    {
-      id: 4,
-      fullName: "Sarah Johnson",
-      email: "sarah.j@example.com",
-      phone: "08123439433",
-      address: "12 Agege, Lagos",
-      expectation: "to grow",
-      gender: "Female",
-      verified: true,
-      balance: {
-        skillToken: 400,
-        mainBalance: 200,
-      },
-      identification: [
-        {
-          type: "Driver's License",
-          id: "DL-98765432",
-          expires: "12/2025",
-        },
-        {
-          type: "National ID",
-          id: "NIN-123456789",
-          issued: "01/2020",
-        },
-        {
-          type: "Passport",
-          id: "PP-987654321",
-          expires: "06/2027",
-        },
-        {
-          type: "State ID",
-          id: "SID-456789123",
-          issued: "03/2022",
-        },
-      ],
-    },
-  ];
+  const apiUrl = import.meta.env.VITE_API_URL; // Correct way in Vite
 
   const handleAction = (action, user) => {
     setOpenDropdownId(null);
@@ -189,10 +45,31 @@ const UserTable = () => {
         break;
     }
   };
+  useEffect(() => {
+    const fetchApply = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/api/get-all`);
+        const data = await response.json();
+        setApplys(data);
+      } catch (error) {
+        console.error("Error fetching fingerprint data:", error);
+      }
+    };
 
+    fetchApply();
+  }, []);
   return (
     <div className="w-full px-3 lg:px-[8rem]">
       {/* Search and Filter Section */}
+
+      <div className="px-4 lg:px-8 py-6">
+        <h1 className="text-2xl font-bold text-gray-800">
+          All Program Applicant
+        </h1>
+        <p className="text-gray-600 mt-1">
+          View and manage all registered users for all programs
+        </p>
+      </div>
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-6"></div>
 
       {/* Users Table */}
@@ -204,14 +81,15 @@ const UserTable = () => {
                 Name/Email
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Program
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Contact
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Other
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                More
-              </th>
+
               <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Status
               </th>
@@ -221,38 +99,38 @@ const UserTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {users.map((user) => (
-              <tr key={user.id} className="hover:bg-gray-50">
+            {applys.map((apply) => (
+              <tr key={apply.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">
-                    {user.fullName}
+                    {apply.fullName}
                   </div>
-                  <div className="text-sm text-gray-500">{user.email}</div>
+                  <div className="text-sm text-gray-500">{apply.email}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">{user.phone}</div>
-                  <div className="text-sm text-gray-500">{user.address}</div>
+                  <div className="text-sm text-gray-500">{apply.phone}</div>
+                  <div className="text-sm text-gray-500">{apply.address}</div>
                 </td>
 
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900">
-                    Expectation: {user.expectation}
+                    Expectation: {apply.expectation}
                   </div>
                   <div className="text-sm text-gray-900">
-                    How good are you: {user.address}
+                    How good are you: {apply.address}
                   </div>
                   <div className="text-sm text-gray-900">
-                    Confidence level: {user.address}
+                    Confidence level: {apply.address}
                   </div>
                   <div className="text-sm text-gray-900">
-                    Skill: {user.address}
+                    Skill: {apply.address}
                   </div>
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex flex-wrap gap-2"></div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-center">
-                  {user.verified ? (
+                  {apply.verified ? (
                     <CheckCircle className="inline-block w-5 h-5 text-green-500" />
                   ) : (
                     <XCircle className="inline-block w-5 h-5 text-red-500" />
@@ -262,37 +140,37 @@ const UserTable = () => {
                   <button
                     onClick={() =>
                       setOpenDropdownId(
-                        openDropdownId === user.id ? null : user.id
+                        openDropdownId === apply.id ? null : apply.id
                       )
                     }
                     className="text-gray-400 hover:text-gray-600"
                   >
                     <MoreVertical className="w-5 h-5" />
                   </button>
-                  {openDropdownId === user.id && (
+                  {openDropdownId === apply.id && (
                     <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
                       <div className="py-1" role="menu">
                         <button
-                          onClick={() => handleAction("view", user)}
+                          onClick={() => handleAction("view", apply)}
                           className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                         >
                           <LuView className="w-4 h-4 mr-2" /> View User
                         </button>
                         <button
-                          onClick={() => handleAction("edit", user)}
+                          onClick={() => handleAction("edit", apply)}
                           className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                         >
                           <Edit className="w-4 h-4 mr-2" /> Edit User
                         </button>
                         <button
-                          onClick={() => handleAction("email", user)}
+                          onClick={() => handleAction("email", apply)}
                           className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                         >
                           <Mail className="w-4 h-4 mr-2" /> Send Email
                         </button>
 
                         <button
-                          onClick={() => handleAction("delete", user)}
+                          onClick={() => handleAction("delete", apply)}
                           className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
                         >
                           <Trash className="w-4 h-4 mr-2" /> Delete
